@@ -80,8 +80,8 @@ function AuthContextProvider(props) {
                 payload: {
                     user: response.data.user
                 }
-            })
-            history.push("/login");
+            });
+            history.push("/");
         }
         else {
             console.log("Error message: " + response.data.errorMessage);
