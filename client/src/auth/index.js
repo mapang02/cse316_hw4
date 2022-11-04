@@ -84,12 +84,15 @@ function AuthContextProvider(props) {
             history.push("/");
         }
         else {
-            console.log("Error message: " + response.data.errorMessage);
+            console.log("Failed to register: " + response.data.errorMessage);
         }
     }
 
     auth.loginUser = async function(email, password) {
-        const response = await api.loginUser(email, password);
+        const response = await api.loginUser(email, password)
+            .catch((err) => {
+                return err.response;
+            });
         if (response.status === 200) {
             authReducer({
                 type: AuthActionType.LOGIN_USER,
@@ -98,6 +101,9 @@ function AuthContextProvider(props) {
                 }
             })
             history.push("/");
+        }
+        else {
+            console.log("Failed to login: " + response.data.errorMessage);
         }
     }
 
