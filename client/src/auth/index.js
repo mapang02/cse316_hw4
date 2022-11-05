@@ -10,13 +10,16 @@ export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
-    REGISTER_USER: "REGISTER_USER"
+    REGISTER_USER: "REGISTER_USER",
+    SET_ACCOUNT_ERROR: "SET_ACCOUNT_ERROR",
+    CLEAR_ACCOUNT_ERROR: "CLEAR_ACCOUNT_ERROR"
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
-        loggedIn: false
+        loggedIn: false,
+        accountError: null
     });
     const history = useHistory();
 
@@ -30,25 +33,43 @@ function AuthContextProvider(props) {
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: payload.loggedIn
+                    loggedIn: payload.loggedIn,
+                    accountError: null
                 });
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    accountError: null
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
-                    loggedIn: false
+                    loggedIn: false,
+                    accountError: null
                 })
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    accountError: null
+                })
+            }
+            case AuthActionType.SET_ACCOUNT_ERROR: {
+                return setAuth({
+                    user: auth.user,
+                    loggedIn: auth.loggedIn,
+                    accountError: payload.error
+                })
+            }
+            case AuthActionType.CLEAR_ACCOUNT_ERROR: {
+                return setAuth({
+                    user: auth.user,
+                    loggedIn: auth.loggedIn,
+                    accountError: null
                 })
             }
             default:
@@ -84,7 +105,7 @@ function AuthContextProvider(props) {
             history.push("/");
         }
         else {
-            console.log("Failed to register: " + response.data.errorMessage);
+            auth.showAccountErrorModal(response.data.errorMessage);
         }
     }
 
@@ -103,7 +124,7 @@ function AuthContextProvider(props) {
             history.push("/");
         }
         else {
-            console.log("Failed to login: " + response.data.errorMessage);
+            auth.showAccountErrorModal(response.data.errorMessage);
         }
     }
 
@@ -126,6 +147,20 @@ function AuthContextProvider(props) {
         }
         console.log("user initials: " + initials);
         return initials;
+    }
+
+    auth.showAccountErrorModal = function(errorMessage) {
+        authReducer( {
+            type: AuthActionType.SET_ACCOUNT_ERROR,
+            payload: { error: errorMessage}
+        })
+    }
+
+    auth.hideAccountErrorModal = function() {
+        authReducer( {
+            type: AuthActionType.CLEAR_ACCOUNT_ERROR,
+            payload: null
+        })
     }
 
     return (
