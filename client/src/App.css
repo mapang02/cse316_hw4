@@ -189,6 +189,7 @@ body {
 .list-card-button {
   float: right;
   transform: scale(2);
+  margin-right: 20px;
 }
 
 #workspace-home,
@@ -234,11 +235,6 @@ body {
   border-color: black;
   background-color: linen;
   color: black;
-}
-
-input {
-  font-size: 8pt;
-  margin-right: 20px;
 }
 
 .top5-item,
@@ -319,6 +315,14 @@ input {
 .modal-header,
 .modal-close {
   font-size: 1.5rem;
+}
+
+.modal-prompt {
+  font-size: 16pt;
+}
+
+.modal-textfield {
+  font-size: 16pt;
 }
 
 .modal p + p {
