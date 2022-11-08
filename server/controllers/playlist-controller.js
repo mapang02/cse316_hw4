@@ -25,6 +25,15 @@ createPlaylist = (req, res) => {
     }
 
     User.findOne({ _id: req.userId }, (err, user) => {
+        //Return error if req.userId does not match body.ownerEmail
+        if (user.email != body.ownerEmail) {
+            console.log("incorrect user!");
+            return res.status(400).json({
+                errorMessage: "authentication error"
+            });
+        }
+
+        //Otherwise, create playlist
         console.log("user found: " + JSON.stringify(user));
         user.playlists.push(playlist._id);
         user
