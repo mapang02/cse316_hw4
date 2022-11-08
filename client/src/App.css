@@ -237,7 +237,8 @@ body {
 }
 
 input {
-  font-size: 20pt;
+  font-size: 8pt;
+  margin-right: 20px;
 }
 
 .top5-item,
